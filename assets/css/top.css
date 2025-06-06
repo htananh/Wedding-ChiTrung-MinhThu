@@ -2010,7 +2010,7 @@
     .thanks {
         padding: 3.91vw 2.6vw 6.51vw;
         text-align: center;
-        margin-bottom:10rem;
+        /* margin-bottom:10rem; */
     }
 
     .thanks .name-wrap {
