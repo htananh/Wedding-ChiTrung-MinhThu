@@ -19,22 +19,23 @@ var a = class {
             setInterval(o, 2e3)
         }
         ;
-        // this.heartShow = () => {
-        //     setInterval( () => {
-        //         let e = document.createElement("div");
-        //         e.className = "heartShow",
-        //         e.innerHTML = "\u2764\uFE0F",
-        //         e.style.left = Math.random() * 100 + "vw",
-        //         e.style.fontSize = Math.random() * 10 + 10 + "px",
-        //         e.style.animationDuration = 6 + Math.random() * 2 + "s",
-        //         document.body.appendChild(e),
-        //         setTimeout( () => {
-        //             e.remove()
-        //         }
-        //         , 5e3)
-        //     }
-        //     , 800)
-        // }
+        this.heartShow = () => {
+          console.log("heartShow");
+            setInterval( () => {
+                let e = document.createElement("div");
+                e.className = "heartShow",
+                e.innerHTML = "🌸",
+                e.style.left = Math.random() * 100 + "vw",
+                e.style.fontSize = Math.random() * 10 + 10 + "px",
+                e.style.animationDuration = 6 + Math.random() * 2 + "s",
+                document.body.appendChild(e),
+                setTimeout( () => {
+                    e.remove()
+                }
+                , 5e3)
+            }
+            , 800)
+        }
         ;
         this.modal = () => {
             let e = document.querySelector(".modal-overlay");
@@ -54,44 +55,86 @@ var a = class {
             let e = document.getElementById("wedding-audio");
             if (!e)
                 return;
-            let t = document.querySelector(".toggle-audio-img")
-              , n = () => {
-                e.play().then( () => {
-                    t && (t.src = "/assets/images/music_player.gif")
+            let t = document.querySelector(".toggle-audio-img");
+            
+            const updateMusicState = (isPlaying) => {
+                if (t) {
+                    if (isPlaying) {
+                        t.classList.add('playing');
+                    } else {
+                        t.classList.remove('playing');
+                    }
                 }
-                ).catch(o => {
-                    console.warn("Kh\xF4ng th\u1EC3 ph\xE1t nh\u1EA1c:", o)
-                }
-                ),
-                document.removeEventListener("click", n),
-                document.removeEventListener("touchstart", n)
-            }
-            ;
-            document.addEventListener("click", n),
-            document.addEventListener("touchstart", n),
+            };
+
+            const n = () => {
+                e.play().then(() => {
+                    updateMusicState(true);
+                }).catch(o => {
+                    console.warn("Không thể phát nhạc:", o);
+                    updateMusicState(false);
+                });
+                document.removeEventListener("click", n);
+                document.removeEventListener("touchstart", n);
+            };
+
+            document.addEventListener("click", n);
+            document.addEventListener("touchstart", n);
+
+            // Update initial state
+            updateMusicState(!e.paused);
+
             t && t.addEventListener("click", o => {
-                o.stopPropagation(),
-                e.paused ? (t.src = "/assets/images/music_player.gif",
-                e.play().catch(s => {
-                    console.warn("Kh\xF4ng th\u1EC3 ph\xE1t nh\u1EA1c:", s)
+                o.stopPropagation();
+                if (e.paused) {
+                    e.play().then(() => {
+                        updateMusicState(true);
+                    }).catch(s => {
+                        console.warn("Không thể phát nhạc:", s);
+                        updateMusicState(false);
+                    });
+                } else {
+                    e.pause();
+                    updateMusicState(false);
                 }
-                )) : (e.pause(),
-                t.src = "/assets/images/music_player.png")
-            }
-            )
-        }
-        ;
+            });
+
+            // Listen for play/pause events
+            e.addEventListener('play', () => updateMusicState(true));
+            e.addEventListener('pause', () => updateMusicState(false));
+        };
         this.toastAnimation(),
         this.heartShow(),
-        this.modal(),
-        this.playAudio()
+        this.playAudio(),
+        this.modal()
+        
     }
 }
 ;
 window.addEventListener("DOMContentLoaded", () => {
+  // Add video control for background music
+  const video = document.querySelector('video');
+  const bgMusic = document.getElementById('wedding-audio');
+  const musicToggleImg = document.querySelector('.toggle-audio-img');
   
-  
-}
+  if (video && bgMusic && musicToggleImg) {
+    video.addEventListener('play', () => {
+      bgMusic.pause();
+      musicToggleImg.src = "/assets/images/audio-open.png";
+      musicToggleImg.classList.remove('playing');
+    });
+    
+    video.addEventListener('pause', () => {
+      bgMusic.play().then(() => {
+        musicToggleImg.src = "/assets/images/audio-open.png";
+        musicToggleImg.classList.add('playing');
+      }).catch(err => {
+        console.warn("Không thể phát nhạc:", err);
+      });
+    });
+  }
+   new a() 
+} 
 );
 
 export {a as default};

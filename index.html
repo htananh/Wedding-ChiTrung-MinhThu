@@ -48,30 +48,17 @@
 
 <body>
 
-  <!--#include virtual="/assets/include/ga_body.html" -->
 
   <div class="root page-home" id="root">
 
-    <!--#include virtual="/assets/include/header.html" -->
-<audio 
-    src="assets/music/EmDongYIDo-DucPhuc.mp3" 
-    autoplay 
-    loop 
-    preload="auto">
-</audio>
+
     <main class="main" id="main">
       <div class="row">
      
-        <!-- <img class="toggle-audio-img"
-          src="/assets/images/music_player.png?v=sha384-3nsoLzjdUqrP+jApbjXye/P5DKMvHDv/FRA1xpkzieXdX+Kew6cmfpyDOl8tFKeg"
-          alt="" width="944" height="956" loading="lazy" decoding="async"> -->
-        <!-- <div class="send-love">
-          <figure><img class="fit"
-              src="/assets/images/send.png?v=sha384-D/MG61FbfL6YB6hR6VEpwlJgy5fPOWAr5JnOtxkdX6PqX6zmIsXgCgVj4X+e101t"
-              alt="" width="1024" height="1024" loading="lazy" decoding="async">
-          </figure>
-          <div class="toast">Gửi lời yêu thương 💌</div>
-        </div> -->
+         <img class="toggle-audio-img"
+          src="/assets/images/audio-open.png"
+          alt="" width="944" height="956" loading="lazy" decoding="async">
+        
         <section >
           <img src="./assets/images/bia.jpg" alt="">
         </section>
@@ -117,9 +104,9 @@
             hôn cùng gia đình chúng tôi</p>
           <div class="house-wrap">
             <div class="house-item">
-              <figure class="intersect-elem fadeInUp"> <img 
-                  src="/assets/images/tugianu.jpg"
-                  alt="" width="3573" height="5359" loading="lazy" decoding="async">
+              <figure class="intersect-elem fadeInUp"> <img class="fit"
+                  src="/assets/images/tugianu.jpg" 
+                  alt="" width="3648" height="5472" loading="lazy" decoding="async">
               </figure>
               <div class="address intersect-elem fadeInUp">
                 <p class="font-hand">Tư Gia Nữ</p>
@@ -379,18 +366,24 @@
         </section>
       </section>
       <section class="thanks">
-        <p class="thanks-ttl">Thank<span>you!</span></p>
-        <section >
+        <!-- <section >
           <figure class="overlay"><img class="fit"
               src="/assets/images/bia.jpg?v=sha384-IiUe5dC2tPEszcb8Rf/Gv1+6eU1yaTuYGJUJyyDfE5OkGk61cpmAnPabKbWHx9Qx"
               alt="" width="5472" height="3648" loading="lazy" decoding="async">
           </figure>
           <div class="modal-overlay">
           </div>
-        </section>
+        </section> -->
+       <div class="video-container">
+           <video controls playsinline src="assets/images/endVideo.mp4"></video>
+       </div>
+        <p class="thanks-ttl">Thank<span>you!</span></p>
+        
       </section>
-
-
+      </div>
+ <audio id="wedding-audio"
+        src="assets/music/EmDongYIDo-DucPhuc.mp3" loop
+        preload="auto"></audio>
     </main>
 <!-- auto music EmDongYIDo -->
 
@@ -404,109 +397,46 @@
   <script src="/assets/js/top.js?v=sha384-UwQYZHo3rqgcXavqHZz+mdvio8ktESO29fgzsMqRIRk+q523orjXzWabVHTzPQtG"
     type="module" crossorigin></script>
   <script src="/assets/js/timeline.js"></script>
-  <!-- <script>
-    const container = document.querySelector('.messages-container');
-    
-    // Automatic scroll
-    let scrollStep, scrollDelay;
 
-  if (window.innerWidth >= 1024) {
-    // Desktop
-    scrollStep = 100;
-    scrollDelay = 20;
-  } else if (window.innerWidth >= 768) {
-    // Tablet
-    scrollStep = 2;
-    scrollDelay = 30;
-  } else {
-    // Mobile
-    scrollStep = 40;
-    scrollDelay = 1;
-  }
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const audio = document.getElementById('wedding-audio');
+      const toggleButton = document.querySelector('.toggle-audio-img');
+      let isPlaying = false;
 
-  // Auto scroll
-  let autoScroll = setInterval(() => {
-    container.scrollLeft += scrollStep;
-    if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
-      container.scrollLeft = 0;
-    }
-  }, scrollDelay);
-
-    // Mouse events for drag scrolling
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    container.addEventListener('mousedown', (e) => {
-      isDown = true;
-      container.classList.add('dragging');
-      startX = e.pageX - container.offsetLeft;
-      scrollLeft = container.scrollLeft;
-      clearInterval(autoScroll); // Stop auto-scroll while dragging
-    });
-
-    container.addEventListener('mouseleave', () => {
-      isDown = false;
-      container.classList.remove('dragging');
-      // Resume auto-scroll after a short delay
-      setTimeout(() => {
-        autoScroll = setInterval(() => {
-          container.scrollLeft += 1;
-          if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
-            container.scrollLeft = 0;
+      // Function to handle music toggle
+      function toggleMusic() {
+          if (isPlaying) {
+              audio.pause();
+          } else {
+              // Play audio and catch any errors
+              const playPromise = audio.play();
+              if (playPromise !== undefined) {
+                  playPromise.then(() => {
+                      // Playback started successfully
+                  }).catch(error => {
+                      console.log("Playback failed:", error);
+                  });
+              }
           }
-        }, 30);
-      }, 1000);
-    });
+          isPlaying = !isPlaying;
+          // You can add visual feedback here if needed
+      }
 
-    container.addEventListener('mouseup', () => {
-      isDown = false;
-      container.classList.remove('dragging');
-      // Resume auto-scroll after a short delay
-      setTimeout(() => {
-        autoScroll = setInterval(() => {
-          container.scrollLeft += 1;
-          if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
-            container.scrollLeft = 0;
-          }
-        }, 30);
-      }, 1000);
-    });
+      // Add click event listener to the toggle button
+      toggleButton.addEventListener('click', toggleMusic);
 
-    container.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - container.offsetLeft;
-      const walk = (x - startX) * 2;
-      container.scrollLeft = scrollLeft - walk;
+      // Try to play on page load after user interaction
+      document.addEventListener('click', function initAudio() {
+          audio.play().then(() => {
+              isPlaying = true;
+              document.removeEventListener('click', initAudio);
+          }).catch(error => {
+              console.log("Auto-play failed:", error);
+          });
+      }, { once: true });
     });
-
-    // Touch events for mobile
-    container.addEventListener('touchstart', (e) => {
-      clearInterval(autoScroll);
-      startX = e.touches[0].pageX - container.offsetLeft;
-      scrollLeft = container.scrollLeft;
-    });
-
-    container.addEventListener('touchend', () => {
-      // Resume auto-scroll after a short delay
-      setTimeout(() => {
-        autoScroll = setInterval(() => {
-          container.scrollLeft += 1;
-          if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
-            container.scrollLeft = 0;
-          }
-        }, 30);
-      }, 1000);
-    });
-
-    container.addEventListener('touchmove', (e) => {
-      e.preventDefault();
-      const x = e.touches[0].pageX - container.offsetLeft;
-      const walk = (x - startX) * 2;
-      container.scrollLeft = scrollLeft - walk;
-    });
-  </script> -->
+  </script>
 
 
 </body>
